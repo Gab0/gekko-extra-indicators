@@ -54,15 +54,15 @@ Indicator.prototype.update = function (candle) {
         var down = logicvalueB;
     }
 
-    // --CALCULATE RESULT;
-    this.dm_up = this.periodWeight * this.dm_up + up;
-    this.dm_down = this.periodWeight * this.dm_down + down;
+        // --CALCULATE RESULT;
+        this.dm_up = this.periodWeight * this.dm_up + up;
+        this.dm_down = this.periodWeight * this.dm_down + down;
 
-    var di_up = this.dm_up/this.atr.result;
-    var di_down = this.dm_down/this.atr.result;
+        this.di_up = this.dm_up/this.atr.result;
+        this.di_down = this.dm_down/this.atr.result;
 
-    var dm_diff = Math.abs(di_up - di_down);
-    var dm_sum = di_up + di_down;
+        var dm_diff = Math.abs(this.di_up - this.di_down);
+        var dm_sum = this.di_up + this.di_down;
         if (this.age > this.period)
             this.result = 100 * dm_diff / dm_sum;
     }

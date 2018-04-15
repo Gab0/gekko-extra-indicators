@@ -9,9 +9,10 @@ var STCSettings= {
     short: 20,
     long: 2,
     signal: 2,
-    cycle: 2,
-    smooth: 3
+    cycle: 9,
+    smooth: 0.5
 }
+
 var TASMASettings = {
 
        optInTimePeriod: 14,
