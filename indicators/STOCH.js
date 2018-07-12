@@ -70,8 +70,7 @@ Indicator.prototype.update = function(candle) {
     var LL = this.getLowest();
     var HH = this.getHighest()
 
-    
-
+   
 
     var K = candle.close - LL;
     K = K / (HH - LL) * 100;
