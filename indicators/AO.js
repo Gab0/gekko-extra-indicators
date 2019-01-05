@@ -8,8 +8,8 @@ var Indicator = function(settings) {
     this.result = 0;
     this.age = 0;
 
-    this.shortsma = new SMA(settings.short);
-    this.longsma = new SMA(settings.long);
+    this.shortsma = new SMA(5);
+    this.longsma = new SMA(34);
 };
 
 Indicator.prototype.update = function(candle) {
@@ -19,7 +19,10 @@ Indicator.prototype.update = function(candle) {
     this.shortsma.update(medianprice);
     this.longsma.update(medianprice);
 
-    this.result = this.shortsma.result - this.longsma.result;
+    this.age++;
+
+    if (this.age > 33)
+        this.result = this.shortsma.result - this.longsma.result;
 
 };
 

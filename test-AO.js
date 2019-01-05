@@ -23,7 +23,6 @@ method.update= function(candle) {
     var AO = this.indicators.ind.result;
     var TAO = this.tulipIndicators.tulipind.result;
 
-    console.log(Object.keys(TAO));
 	  console.log('AO>> ' + AO);
     console.log('TULIP AO>> ' + TAO['result']);
     console.log('\n');
