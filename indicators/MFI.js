@@ -9,7 +9,7 @@ var Indicator = function(settings) {
     this.age = 0;
 
 
-    this.lastFlow = -6435;
+    this.lastPrice = -1;
 
     this.timePeriod = settings.optInTimePeriod;
 
@@ -23,44 +23,44 @@ Indicator.prototype.sum = function(a, b) {
 
 Indicator.prototype.update = function(candle) {
 
-    var medianPrice = (candle.high + candle.low + candle.close) / 3;
+    var medianPrice = (candle.high + candle.low + candle.close) / 3.0;
 
     var moneyFlow = medianPrice * candle.volume;
 
-    if (this.lastFlow == -6435)
+    if (this.lastPrice < 0)
     {
-        this.lastFlow = moneyFlow;
+        this.lastPrice = medianPrice;
     }
 
-    if (moneyFlow > this.lastFlow)
+    if (medianPrice > this.lastPrice)
     {
         this.posHist.push(moneyFlow);
         this.negHist.push(0.0);
     }
-    else if (moneyFlow < this.lastFlow)
+    else if (medianPrice < this.lastPrice)
     {
         this.posHist.push(0.0);
         this.negHist.push(moneyFlow);
     }
-    else if (moneyFlow == this.lastFlow)
+    else 
     {
         this.posHist.push(0.0);
         this.negHist.push(0.0);
     }
 
-    this.lastFlow = moneyFlow;
+    this.lastPrice = medianPrice;
 
     //this.record.push(moneyFlow);
 
     if ((this.posHist.length) > this.timePeriod)
     {
+        this.posHist.shift();
+        this.negHist.shift();
         var posSum = this.posHist.reduce(this.sum, 0);
         var negSum = this.negHist.reduce(this.sum, 0);
 
         this.result = posSum / (posSum + negSum) * 100.0;
 
-        this.posHist.shift();
-        this.negHist.shift();
     }
 
 
