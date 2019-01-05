@@ -8,12 +8,14 @@ var Indicator = function(settings) {
     this.result = 0;
     this.age = 0;
 
-    
+
     this.mainema = new EMA(settings.optInTimePeriod);
     this.secondema = new EMA(settings.optInTimePeriod);
     this.thirdema = new EMA(settings.optInTimePeriod);
 
-    this.readyPeriods = settings.optInTimePeriod - 1;
+    this.mainEmaBuffer = 0;
+
+    this.readyPeriods = settings.optInTimePeriod + 1;
     this.lastSmoothedEma = 0;
 };
 
