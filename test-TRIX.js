@@ -12,8 +12,8 @@ method.init = function() {
     var TTRIXSettings = {
         optInTimePeriod: 15
     };
-    this.addIndicator('ind', 'DPO', TRIXSettings);
-    this.addTulipIndicator("tulipind", "dpo", TTRIXSettings);
+    this.addIndicator('ind', 'TRIX', TRIXSettings);
+    this.addTulipIndicator("tulipind", "trix", TTRIXSettings);
 };
 
 
