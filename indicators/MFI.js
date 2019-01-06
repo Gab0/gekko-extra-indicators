@@ -5,7 +5,7 @@ var SMA = require('./SMA');
 var Indicator = function(settings) {
     this.input = 'candle';
 
-    this.result = 0;
+    this.result = NaN;
     this.age = 0;
 
 

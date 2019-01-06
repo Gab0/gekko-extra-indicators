@@ -8,7 +8,7 @@ var SMA = require('./SMA');
 var Indicator = function(settings) {
     this.input = 'price';
 
-    this.result = 0;
+    this.result = NaN;
     this.age = 0;
 
     this.sma = new SMA(settings.optInTimePeriod);
@@ -22,6 +22,7 @@ Indicator.prototype.update = function(price) {
 
     this.pricehist.push(price);
     this.sma.update(price);
+
     if (this.pricehist.length >= this.delay)
     {
         var oldprice = this.pricehist.shift();
