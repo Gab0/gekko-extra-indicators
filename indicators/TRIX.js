@@ -1,23 +1,19 @@
-//TRIX indicator by Gab0 - 04/jan/2019;
+//TRIX indicator by Gab0 - 05/jan/2019;
 
 var EMA = require('./EMA');
 
 var Indicator = function(settings) {
     this.input = 'price';
 
-    this.result = 0;
+    this.result = NaN;
     this.age = 0;
-
-
-    this.mainema = new EMA(settings.optInTimePeriod);
-    this.secondema = new EMA(settings.optInTimePeriod);
-    this.thirdema = new EMA(settings.optInTimePeriod);
-
 
     this.period = settings.optInTimePeriod;
 
-    this.readyPeriods = 2 / (settings.optInTimePeriod + 1);
-    this.lastSmoothedEma = 0;
+    this.mainema = new EMA(this.period);
+    this.secondema = new EMA(this.period);
+    this.thirdema = new EMA(this.period);
+
 };
 
 Indicator.prototype.update = function(price) {
@@ -25,39 +21,38 @@ Indicator.prototype.update = function(price) {
     this.age++;
 
     this.mainema.update(price);
-    this.secondema.update(this.mainema.result);
-    this.thirdema.update(this.secondema.result);
 
-    var ressecondema = 0;
-    var resthirdema = 0;
-
-    // Strange code... Copied from Tulind C implementation.
-    if (this.age == this.period - 1)
+    // THIS IS AFTER INDICATOR IS ONLINE;
+    if (this.age > (this.period * 3 - 2))
     {
-        ressecondema = this.mainema.result;
-    } else if (this.age > this.period - 1)
-    {
-        ressecondema = this.secondema.result;
+        this.secondema.update(this.mainema.result);
 
-        if (this.age == this.period * 2 -2)
-        {
+        var lastSmoothEma = this.thirdema.result;
 
-            resthirdema = ressecondema;
-        }
-        else if (this.age > this.period * 2 - 2)
-        {
-            resthirdema = this.thirdema.result;
-        }
+        this.thirdema.update(this.secondema.result);
+
+        this.result = (this.thirdema.result - lastSmoothEma) / this.thirdema.result * 100;
 
     }
 
-
-    if (this.age > this.period * 2 - 2)
+    // THIS IS BEFORE INDICATOR IS ONLINE;
+    else
     {
-        this.result = (resthirdema - this.lastSmoothedEma) / resthirdema * 100;
-        //this.result = (this.thirdema.result - this.lastSmoothedEma) * 100;
+
+        // EMA updates are gradual on the first periods.
+        if (this.age > this.period - 1)
+        {
+
+            this.secondema.update(this.mainema.result);
+
+            if (this.age > this.period * 2 - 2)
+            {
+                this.thirdema.update(this.secondema.result);
+            }
+            
+        }
+
+
     }
-    this.lastSmoothedEma = resthirdema;
 };
-
-module.exports = Indicator;
+    module.exports = Indicator;

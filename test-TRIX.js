@@ -9,11 +9,9 @@ method.init = function() {
         optInTimePeriod: 15,
     };
 
-    var TTRIXSettings = {
-        optInTimePeriod: 15
-    };
     this.addIndicator('ind', 'TRIX', TRIXSettings);
-    this.addTulipIndicator("tulipind", "trix", TTRIXSettings);
+    this.addTulipIndicator("tulipind", "trix", TRIXSettings);
+
 };
 
 
@@ -23,10 +21,11 @@ method.update= function(candle) {
     var TRIX = this.indicators.ind.result;
     var TTRIX = this.tulipIndicators.tulipind.result;
 
+    console.log(this.age);
+
 	  console.log('TRIX>> ' + TRIX);
     console.log('TULIP TRIX>> ' + TTRIX['result']);
     console.log('\n');
-
 };
 
 method.log = function() {};
