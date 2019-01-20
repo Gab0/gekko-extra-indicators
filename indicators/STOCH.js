@@ -1,7 +1,9 @@
 // Stochastic Oscillator Slow - STOCH
 // Ported by Gab0 march-2018
 // ref http://www.tadoc.org/indicator/STOCH.htm
-// state: badly coded, uncertain results;
+// Added Smooth K, set to 1 to disable
+// Takes 5-6 candles for K % D calculations to catch up initially??
+// Added - if (candle.high !== candle.low), to stop NaN values in K&D when no exchange data
 
 var SMA = require('./SMA');
 var _ = require('lodash');
@@ -18,6 +20,8 @@ var Indicator = function(settings) {
     this.KPeriods = settings.KPeriods;
 
     this.KMA = new SMA(settings.DPeriods);
+    this.smoothK = new SMA(settings.smoothKPeriods);
+
 }
 
 Indicator.prototype.getLowest = function()
@@ -55,6 +59,9 @@ Indicator.prototype.getHighest = function()
 
 Indicator.prototype.update = function(candle) {
 
+    if (candle.high !== candle.low)
+    {
+
     this.candles.push(candle);
     if (this.candles.length > this.KPeriods)
         this.candles.shift();
@@ -63,14 +70,19 @@ Indicator.prototype.update = function(candle) {
     var LL = this.getLowest();
     var HH = this.getHighest()
 
+  
 
     var K = candle.close - LL;
     K = K / (HH - LL) * 100;
 
-    this.KMA.update(K);
+    this.smoothK.update(K)
 
-    this.K = K;
+    var smoothD = this.smoothK.result
+    this.KMA.update(smoothD);
+
+    this.K = this.smoothK.result;
     this.D = this.KMA.result;
+    }
 }
 
 module.exports = Indicator;
